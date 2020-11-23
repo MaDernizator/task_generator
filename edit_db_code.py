@@ -55,10 +55,13 @@ class EditWindow(QMainWindow, AddWindowGUI):
         self.id = id
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
-        subject = cur.execute(f"""SELECT subject FROM subjects WHERE id = (SELECT subject FROM types WHERE id = (SELECT type FROM patterns WHERE id = {self.id}))""").fetchall()[0][0]
+        subject = cur.execute(f"""SELECT subject FROM subjects WHERE id 
+            = (SELECT subject FROM types WHERE id = (SELECT type FROM patterns WHERE id 
+            = {self.id}))""").fetchall()[0][0]
         self.subject_edit.addItem(subject)
         type = cur.execute(
-            f"""SELECT type FROM types WHERE id = (SELECT type FROM patterns WHERE id = {self.id})""").fetchall()[
+            f"""SELECT type FROM types WHERE id = (SELECT type FROM patterns WHERE id 
+                = {self.id})""").fetchall()[
             0][0]
         self.type_edit.addItem(type)
         name = cur.execute(f"""SELECT name FROM patterns WHERE id = {self.id}""").fetchall()[0][0]
@@ -95,14 +98,8 @@ class EditWindow(QMainWindow, AddWindowGUI):
             con = sqlite3.connect('pattern_db.db')
             cur = con.cursor()
             cur.execute(
-                f"""UPDATE patterns SET name = '{self.name_edit.text()}', pattern  = '{self.pattern_text.toPlainText()}' WHERE id = {self.id}""")
+                f"""UPDATE patterns SET name = '{self.name_edit.text()}', pattern  
+                    = '{self.pattern_text.toPlainText()}' WHERE id = {self.id}""")
             con.commit()
             con.close()
         self.view.reload()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = EditWindow()
-    ex.show()
-    sys.exit(app.exec_())

@@ -1,14 +1,8 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.CreateWindowGUI import CreateWindowGUI
 from task_widget_code import TaskWidget
 from docx import Document
-from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
 from task_cod import TaskGenerator
-from PyQt5.QtWidgets import QFileDialog, QPushButton
-from PyQt5.QtWidgets import QListWidgetItem
-from PyQt5.QtWidgets import QLayout
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QFileDialog, QWidget, QVBoxLayout
 import subprocess
 import os
 import sys
@@ -47,10 +41,6 @@ class CreateWindow(QWidget, CreateWindowGUI):
             self.task_widgets[-1].set_parametrs(*task.split(';'))
         setting_file.close()
 
-
-
-
-
     def add(self):
         self.n += 1
         task = TaskWidget(self)
@@ -71,8 +61,6 @@ class CreateWindow(QWidget, CreateWindowGUI):
             subprocess.call(['attrib', '+h', directory + '/setting.txt'])
             setting_file.write('\n'.join(settings))
             setting_file.close()
-
-
 
         def generate_document():
             tasks = Document()
@@ -102,9 +90,3 @@ class CreateWindow(QWidget, CreateWindowGUI):
         answers.save(directory + '/' + self.name_edit.text() + '_ответы.docx')
         save()
         self.close()
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     ex = Example()
-#     ex.show()
-#     sys.exit(app.exec_())

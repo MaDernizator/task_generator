@@ -24,6 +24,6 @@ class ErrorWindowGUI(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("", ""))
         self.error_label.setText(_translate("Dialog", "TextLabel"))
         self.ok_button.setText(_translate("Dialog", "Ok"))

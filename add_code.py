@@ -34,7 +34,6 @@ class AddWindow(QMainWindow, AddWindowGUI):
     def changed(self):
         self.save_button.setEnabled(True)
 
-
     def clear(self):
         self.add_edit_type.setChecked(True)
         self.add_edit_subject.setChecked(True)
@@ -97,16 +96,21 @@ class AddWindow(QMainWindow, AddWindowGUI):
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
 
-        if self.add_edit_subject.isChecked() and (self.subject_edit.currentText().strip(), ) in \
+        if self.add_edit_subject.isChecked() and (self.subject_edit.currentText().strip(),) in \
                 cur.execute('''SELECT subject FROM subjects''').fetchall():
             self.error('Такой предмет уже существует')
             return False
         if not self.add_edit_subject.isChecked() and self.add_edit_type.isChecked() and \
-                (self.type_edit.currentText().strip(), ) in cur.execute(f'''SELECT type FROM types WHERE subject = (SELECT id FROM subjects WHERE subject = '{self.subject_edit.currentText().strip()}')''').fetchall():
+                (self.type_edit.currentText().strip(),) in cur.execute(f'''SELECT type FROM types 
+                    WHERE subject = (SELECT id FROM subjects WHERE subject 
+                    = '{self.subject_edit.currentText().strip()}')''').fetchall():
             self.error('Такой тип уже существует')
             return False
         if not self.add_edit_type.isChecked() and not self.add_edit_subject.isChecked():
-            if (self.name_edit.text(), ) in cur.execute(f'''SELECT name FROM patterns WHERE type = (SELECT id FROM types WHERE type = '{self.type_edit.currentText().strip()}' AND subject = (SELECT id FROM subjects WHERE subject = '{self.subject_edit.currentText().strip()}'))'''):
+            if (self.name_edit.text(),) in cur.execute(f'''SELECT name FROM patterns WHERE type 
+                    = (SELECT id FROM types WHERE type = '{self.type_edit.currentText().strip()}' 
+                    AND subject = (SELECT id FROM subjects WHERE subject 
+                    = '{self.subject_edit.currentText().strip()}'))'''):
                 self.error('Такой шаблон уже существует')
                 return False
         con.close()
@@ -120,17 +124,21 @@ class AddWindow(QMainWindow, AddWindowGUI):
             return False
         return True
 
-
     def save(self):
         self.statusbar.clearMessage()
         if self.check_name_and_type_and_subject() and self.check_pattern():
             con = sqlite3.connect('pattern_db.db')
             cur = con.cursor()
             if self.add_edit_subject.isChecked():
-                cur.execute(f"""INSERT INTO subjects(subject) VALUES('{self.subject_edit.currentText()}')""")
+                cur.execute(f"""INSERT INTO subjects(subject) 
+                    VALUES('{self.subject_edit.currentText()}')""")
             if self.add_edit_type.isChecked():
-                cur.execute(f"""INSERT INTO types(subject, type) VALUES((SELECT id FROM subjects WHERE subject = '{self.subject_edit.currentText()}'), '{self.type_edit.currentText()}')""")
-            type = cur.execute(f"""SELECT id FROM types WHERE subject = (SELECT id FROM subjects WHERE subject = '{self.subject_edit.currentText()}')""").fetchall()[0][0]
+                cur.execute(f"""INSERT INTO types(subject, type) VALUES((SELECT id FROM subjects 
+                    WHERE subject = '{self.subject_edit.currentText()}'), 
+                    '{self.type_edit.currentText()}')""")
+            type = cur.execute(f"""SELECT id FROM types WHERE subject 
+                = (SELECT id FROM subjects WHERE subject 
+                = '{self.subject_edit.currentText()}')""").fetchall()[0][0]
             name = self.name_edit.text()
             pattern = self.pattern_text.toPlainText()
             cur.execute(f"""INSERT INTO patterns(type, name, pattern) 
@@ -140,12 +148,3 @@ class AddWindow(QMainWindow, AddWindowGUI):
             self.save_button.setEnabled(False)
             self.view.reload()
             self.close()
-
-
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = AddWindow()
-    ex.show()
-    sys.exit(app.exec_())

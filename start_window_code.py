@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.StartWindowGUI import StartWindowGUI
 from create_window_code import CreateWindow
 from view_code import ViewWindow
-import create_window_code
 
 import sys
 
@@ -27,7 +26,6 @@ class StartWindow(QMainWindow, StartWindowGUI):
         self.create_window = CreateWindow()
         self.create_window.open_file()
         self.create_window.show()
-
 
     def edit(self):
         self.view_window.show()

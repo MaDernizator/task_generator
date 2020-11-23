@@ -1,11 +1,10 @@
 from PyQt5.QtWidgets import QWidget
 from gui.NewTaskWidgetGUI import TaskWidgetGUI
 import sqlite3
-
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QMainWindow
 from PyQt5.QtGui import QPixmap, QIcon
 from edit_db_code import EditWindow
 import sys
+
 sys.excepthook = lambda *a: sys.__excepthook__(*a)
 
 
@@ -37,16 +36,17 @@ class TaskWidget(QWidget, TaskWidgetGUI):
         subjects = cur.execute("""SELECT subject FROM subjects""").fetchall()
         for subject in subjects:
             self.subject_edit.addItem(subject[0])
-        subject = cur.execute(f'''SELECT subject FROM subjects WHERE id = (SELECT id FROM types WHERE id = (SELECT type from patterns WHERE id = {id}))''').fetchall()[0][0]
+        subject = cur.execute(f'''SELECT subject FROM subjects WHERE id 
+            = (SELECT id FROM types WHERE id 
+            = (SELECT type from patterns WHERE id = {id}))''').fetchall()[0][0]
         self.subject_edit.setCurrentText(subject)
-        type = cur.execute(f"""SELECT type FROM types WHERE id = (SELECT type FROM patterns WHERE id = '{id}')""").fetchall()[0][0]
+        type = cur.execute(f"""SELECT type FROM types WHERE id 
+            = (SELECT type FROM patterns WHERE id = '{id}')""").fetchall()[0][0]
         self.type_edit.setCurrentText(type)
         name = cur.execute(f'''SELECT name FROM patterns WHERE id = {id}''').fetchall()[0][0]
         self.name_edit.setCurrentText(name)
         con.close()
         self.count_edit.setValue(int(count))
-
-
 
     def set_subject(self):
         con = sqlite3.connect('pattern_db.db')
@@ -62,7 +62,9 @@ class TaskWidget(QWidget, TaskWidgetGUI):
         self.name_edit.clear()
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
-        types = cur.execute(f"""SELECT type FROM types WHERE subject = (SELECT id FROM subjects WHERE subject = '{self.subject_edit.currentText()}')""").fetchall()
+        types = cur.execute(f"""SELECT type FROM types WHERE subject = 
+            (SELECT id FROM subjects WHERE subject 
+            = '{self.subject_edit.currentText()}')""").fetchall()
         for type in types:
             self.type_edit.addItem(type[0])
         con.close()
@@ -73,16 +75,19 @@ class TaskWidget(QWidget, TaskWidgetGUI):
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
         names = cur.execute(
-            f"""SELECT name FROM patterns WHERE type in (SELECT id FROM types WHERE type = '{self.type_edit.currentText()}')""").fetchall()
+            f"""SELECT name FROM patterns WHERE type in (SELECT id FROM types WHERE type 
+                = '{self.type_edit.currentText()}')""").fetchall()
         for name in names:
             self.name_edit.addItem(name[0])
         con.close()
 
-
     def get_id(self):
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
-        id = cur.execute(f"""SELECT id FROM patterns WHERE name = '{self.name_edit.currentText()}' AND type = (SELECT id FROM types WHERE type = '{self.type_edit.currentText()}' AND subject = (SELECT id from subjects WHERE subject = '{self.subject_edit.currentText()}'))""").fetchall()[0][0]
+        id = cur.execute(f"""SELECT id FROM patterns WHERE name = '{self.name_edit.currentText()}' 
+            AND type = (SELECT id FROM types WHERE type = '{self.type_edit.currentText()}' 
+            AND subject = (SELECT id from subjects WHERE subject 
+            = '{self.subject_edit.currentText()}'))""").fetchall()[0][0]
         return id
 
     def get_count(self):
@@ -92,35 +97,7 @@ class TaskWidget(QWidget, TaskWidgetGUI):
 
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
-        pattern = cur.execute(f"""SELECT pattern FROM patterns WHERE id = {self.get_id()}""").fetchall()[0][0]
+        pattern = cur.execute(f"""SELECT pattern FROM 
+            patterns WHERE id = {self.get_id()}""").fetchall()[0][0]
         con.close()
         return pattern
-
-    # def set_type(self, type_):
-    #     self.count_edit.setText(type_)
-
-#
-# class Example(QMainWindow):
-#
-#     def __init__(self):
-#         super().__init__()
-#
-#         self.initUI()
-#
-#     def initUI(self):
-#         self.wid1 = TaskWidget(self)
-#         self.resize(500, 500)
-#
-#         # hbox = QHBoxLayout()
-#         # hbox.addWidget(self.wid1)
-#         # self.setLayout(hbox)
-#
-#         self.setGeometry(300, 300, 1000, 1000)
-#         self.show()
-#
-#
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     ex = Example()
-#     ex.show()
-#     sys.exit(app.exec_())

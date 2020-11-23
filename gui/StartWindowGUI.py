@@ -32,7 +32,7 @@ class StartWindowGUI(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("", ""))
         self.create_button.setText(_translate("MainWindow", "Создать"))
         self.open_button.setText(_translate("MainWindow", "Открыть"))
         self.edit_button.setText(_translate("MainWindow", "Редактировать шаблоны"))

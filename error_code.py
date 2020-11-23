@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 from gui.ErrorWindowGUI import ErrorWindowGUI
 import sys
 
@@ -18,9 +18,3 @@ class ErrorWindow(QMainWindow, ErrorWindowGUI):
         self.error_label.setText(message)
         self.error_label.setGeometry(200 - self.error_label.sizeHint().width() / 2, 40, 300, 100)
         self.error_label.resize(self.error_label.sizeHint())
-
-# if __name__ == '__main__':
-#   app = QApplication(sys.argv)
-#   ex = AddWindow()
-#   ex.show()
-#  sys.exit(app.exec_())

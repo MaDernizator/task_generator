@@ -41,11 +41,6 @@ class ViewWindowGUI(object):
         item = QtWidgets.QTableWidgetItem()
         self.table.setHorizontalHeaderItem(3, item)
         self.table.horizontalHeader().setDefaultSectionSize(100)
-        # self.reload_button = QtWidgets.QPushButton(self.centralwidget)
-        # self.reload_button.setGeometry(QtCore.QRect(690, 10, 75, 75))
-        # self.reload_button.setText("")
-        # self.reload_button.setIconSize(QtCore.QSize(75, 75))
-        # self.reload_button.setObjectName("reload_button")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -65,7 +60,7 @@ class ViewWindowGUI(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("", ""))
         item = self.table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "id"))
         item = self.table.horizontalHeaderItem(1)

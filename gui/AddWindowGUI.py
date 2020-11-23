@@ -96,7 +96,7 @@ class AddWindowGUI(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("", ""))
         self.label_2.setText(_translate("MainWindow", "Тип"))
         self.label.setText(_translate("MainWindow", "Предмет"))
         self.add_edit_subject.setText(_translate("MainWindow", "Создать"))
