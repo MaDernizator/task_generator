@@ -74,7 +74,6 @@ class TaskWidget(QWidget, TaskWidgetGUI):
         cur = con.cursor()
         pattern = cur.execute(f"""SELECT pattern FROM patterns WHERE id = {self.get_id()}""").fetchall()[0][0]
         con.close()
-
         return pattern
 
     # def set_type(self, type_):

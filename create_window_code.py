@@ -2,13 +2,15 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.CreateWindowGUI import CreateWindowGUI
 from task_widget_code import TaskWidget
 from docx import Document
-from PyQt5.QtWidgets import QHBoxLayout, QWidget
+from PyQt5.QtGui import QPalette
+from PyQt5.QtWidgets import QVBoxLayout, QWidget
 from task_cod import TaskGenerator
-from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtWidgets import QDial
+from PyQt5.QtWidgets import QFileDialog, QPushButton
+from PyQt5.QtWidgets import QListWidgetItem
+from PyQt5.QtWidgets import QLayout
+from PyQt5.QtWidgets import QWidget
 import os
 import sys
-
 
 sys.excepthook = lambda *a: sys.__excepthook__(*a)
 
@@ -18,47 +20,28 @@ class CreateWindow(QWidget, CreateWindowGUI):
         self.task_widgets = []
         super().__init__()
         self.setupUi(self)
-        # self.tasks_layout = QHBoxLayout()
         self.add_button.clicked.connect(self.add)
         self.generate_button.clicked.connect(self.generate)
         self.generate_button.setEnabled(False)
-        # self.add()
+        self.tasks_layout = QVBoxLayout()
+        # self.tasks_layout.setSizeConstraint(QLayout.SetNoConstraint)
+        self.qw = QWidget()
+        self.qw.setFixedHeight(150)
+        self.n = 0
 
-    def initUI(self):
-        pass
-        # self.wid1 = TaskWidget(self)
-        #
-        # hbox = QHBoxLayout()
-        # hbox.addWidget(self.wid1)
-        # self.setLayout(hbox)
-        #
-        # self.setGeometry(300, 300, 1000, 1000)
-
-
-
+        self.qw.setLayout(self.tasks_layout)
+        self.task_area.setWidget(self.qw)
 
     def add(self):
-        self.wid1 = TaskWidget(self)
-
-        # hbox = QHBoxLayout()
-        # hbox.addWidget(self.wid1)
-        # self.setLayout(hbox)
-        #
-        # self.setGeometry(300, 300, 1000, 1000)
-        # self.task = TaskWidget(self)
-        # self.task_widgets.append(self.task)
-        # self.tasks_layout.addWidget(self.task)
-        # self.setLayout(self.tasks_layout)
-        # self.generate_button.setEnabled(True)
-        # self.wid1 = TaskWidget(self)
-        # wid1 = TaskWidget(self)
-        # hbox = QHBoxLayout()
-        # hbox.addWidget(wid1)
-        # self.setLayout(hbox)
-        #
-        # self.setGeometry(300, 300, 1000, 1000)
-        # self.show()
-
+        self.n += 1
+        task = TaskWidget(self)
+        self.task_widgets.append(task)
+        # # self.task_list.addItem(task)
+        # item = QListWidgetItem()
+        # self.task_list.setItemWidget(item, QPushButton())
+        self.tasks_layout.addWidget(task)
+        self.qw.setFixedHeight(10 + 140 * self.n)
+        self.generate_button.setEnabled(True)
 
     def generate(self):
         def generate_document():
@@ -80,7 +63,7 @@ class CreateWindow(QWidget, CreateWindowGUI):
         directory = \
             file_dialog.getSaveFileName(self, self.name_edit.text(), 'имя работы',
                                         'Все файлы (*)')[0]
-        print(directory)
+        # print(directory)
         os.mkdir(directory)
 
         answers = Document()
@@ -90,24 +73,6 @@ class CreateWindow(QWidget, CreateWindowGUI):
             generate_document()
         answers.save(directory + '/' + self.name_edit.text() + '_ответы.docx')
 
-# class Example(QMainWindow):
-#
-#     def __init__(self):
-#         super().__init__()
-#
-#         self.initUI()
-#
-#     def initUI(self):
-#         self.wid1 = TaskWidget(self)
-#
-#         hbox = QHBoxLayout()
-#         hbox.addWidget(self.wid1)
-#         self.setLayout(hbox)
-#
-#         self.setGeometry(300, 300, 1000, 1000)
-#         self.show()
-#
-#
 # if __name__ == '__main__':
 #     app = QApplication(sys.argv)
 #     ex = Example()
