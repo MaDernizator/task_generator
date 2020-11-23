@@ -2,14 +2,15 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.AddWindowGUI import AddWindowGUI
 from task_cod import TaskGenerator
 import sqlite3
+from error_code import ErrorWindow
 import sys
 
 sys.excepthook = lambda *a: sys.__excepthook__(*a)
 
 
-# TODO переделать на наследование
 class EditWindow(QMainWindow, AddWindowGUI):
-    def __init__(self, only_view=False):
+    def __init__(self, view, only_view=False):
+        self.view = view
         super().__init__()
         self.setupUi(self)
         self.add_edit_type.hide()
@@ -22,18 +23,23 @@ class EditWindow(QMainWindow, AddWindowGUI):
             self.name_edit.textChanged.connect(self.changed)
             self.pattern_text.textChanged.connect(self.changed)
             self.save_button.setEnabled(False)
+            self.error_window = ErrorWindow()
         if only_view:
             self.save_button.hide()
             self.clear_button.hide()
             self.name_edit.setEnabled(False)
             self.pattern_text.setEnabled(False)
 
+    def error(self, message):
+        self.error_window.show()
+        self.error_window.display(message)
+
     def changed(self):
         self.save_button.setEnabled(True)
 
     def delete(self):
         if self.save_button.isEnabled():
-            self.statusbar.showMessage('Есть несохранённые изменения')
+            self.error('Есть несохранённые изменения')
         else:
             con = sqlite3.connect('pattern_db.db')
             cur = con.cursor()
@@ -41,6 +47,7 @@ class EditWindow(QMainWindow, AddWindowGUI):
             con.commit()
             con.close()
             self.close()
+        self.view.reload()
 
     def set_id(self, id):
         self.type_edit.clear()
@@ -66,10 +73,10 @@ class EditWindow(QMainWindow, AddWindowGUI):
 
     def check_name_and_type_and_subject(self):
         if not self.name_edit.text().strip():
-            self.statusbar.showMessage('Пустое название')
+            self.error('Пустое название')
             return False
         if not self.pattern_text.toPlainText():
-            self.statusbar.showMessage('Пустой текст шаблона')
+            self.error('Пустой текст шаблона')
             return False
         return True
 
@@ -77,7 +84,7 @@ class EditWindow(QMainWindow, AddWindowGUI):
         try:
             TaskGenerator(self.pattern_text.toPlainText())
         except Exception:
-            self.statusbar.showMessage('Неверный шаблон')
+            self.error('Неверный шаблон')
             return False
         return True
 
@@ -91,6 +98,7 @@ class EditWindow(QMainWindow, AddWindowGUI):
                 f"""UPDATE patterns SET name = '{self.name_edit.text()}', pattern  = '{self.pattern_text.toPlainText()}' WHERE id = {self.id}""")
             con.commit()
             con.close()
+        self.view.reload()
 
 
 if __name__ == '__main__':

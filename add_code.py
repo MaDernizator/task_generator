@@ -2,15 +2,17 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.AddWindowGUI import AddWindowGUI
 from task_cod import TaskGenerator
 import sqlite3
+from error_code import ErrorWindow
 import sys
 
 sys.excepthook = lambda *a: sys.__excepthook__(*a)
 
 
 class AddWindow(QMainWindow, AddWindowGUI):
-    def __init__(self):
+    def __init__(self, view):
         super().__init__()
         self.setupUi(self)
+        self.view = view
         self.add_edit_subject.stateChanged.connect(self.subject_checkbox_changed)
         self.add_edit_type.stateChanged.connect(self.type_checkbox_changed)
         self.save_button.clicked.connect(self.save)
@@ -23,6 +25,11 @@ class AddWindow(QMainWindow, AddWindowGUI):
         self.subject_edit.currentTextChanged.connect(self.changed)
         self.name_edit.textChanged.connect(self.changed)
         self.pattern_text.textChanged.connect(self.changed)
+        self.error_window = ErrorWindow()
+
+    def error(self, message):
+        self.error_window.show()
+        self.error_window.display(message)
 
     def changed(self):
         self.save_button.setEnabled(True)
@@ -76,33 +83,32 @@ class AddWindow(QMainWindow, AddWindowGUI):
 
     def check_name_and_type_and_subject(self):
         if not self.subject_edit.currentText().strip():
-            self.statusbar.showMessage('Пустой предмет')
+            self.error('Пустой предмет')
             return False
         if not self.type_edit.currentText().strip():
-            self.statusbar.showMessage('Пустой тип')
+            self.error('Пустой тип')
             return False
         if not self.name_edit.text().strip():
-            self.statusbar.showMessage('Пустое название')
+            self.error('Пустое название')
             return False
         if not self.pattern_text.toPlainText():
-            self.statusbar.showMessage('Пустой текст шаблона')
+            self.error('Пустой текст шаблона')
             return False
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
 
         if self.add_edit_subject.isChecked() and (self.subject_edit.currentText().strip(), ) in \
                 cur.execute('''SELECT subject FROM subjects''').fetchall():
-            self.statusbar.showMessage('Такой предмет уже существует')
+            self.error('Такой предмет уже существует')
             return False
         if not self.add_edit_subject.isChecked() and self.add_edit_type.isChecked() and \
                 (self.type_edit.currentText().strip(), ) in cur.execute(f'''SELECT type FROM types WHERE subject = (SELECT id FROM subjects WHERE subject = '{self.subject_edit.currentText().strip()}')''').fetchall():
-            self.statusbar.showMessage('Такой тип уже существует')
+            self.error('Такой тип уже существует')
             return False
         if not self.add_edit_type.isChecked() and not self.add_edit_subject.isChecked():
             if (self.name_edit.text(), ) in cur.execute(f'''SELECT name FROM patterns WHERE type = (SELECT id FROM types WHERE type = '{self.type_edit.currentText().strip()}' AND subject = (SELECT id FROM subjects WHERE subject = '{self.subject_edit.currentText().strip()}'))'''):
-                self.statusbar.showMessage('Такой шаблон уже существует')
+                self.error('Такой шаблон уже существует')
                 return False
-                #TODO дописать диалоговое окно с предложением перезаписать шаблон
         con.close()
         return True
 
@@ -110,7 +116,7 @@ class AddWindow(QMainWindow, AddWindowGUI):
         try:
             TaskGenerator(self.pattern_text.toPlainText())
         except Exception:
-            self.statusbar.showMessage('Неверный шаблон')
+            self.error('Неверный шаблон')
             return False
         return True
 
@@ -132,6 +138,8 @@ class AddWindow(QMainWindow, AddWindowGUI):
             con.commit()
             con.close()
             self.save_button.setEnabled(False)
+            self.view.reload()
+            self.close()
 
 
 

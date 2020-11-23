@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QFileDialog, QPushButton
 from PyQt5.QtWidgets import QListWidgetItem
 from PyQt5.QtWidgets import QLayout
 from PyQt5.QtWidgets import QWidget
+import subprocess
 import os
 import sys
 
@@ -24,7 +25,6 @@ class CreateWindow(QWidget, CreateWindowGUI):
         self.generate_button.clicked.connect(self.generate)
         self.generate_button.setEnabled(False)
         self.tasks_layout = QVBoxLayout()
-        # self.tasks_layout.setSizeConstraint(QLayout.SetNoConstraint)
         self.qw = QWidget()
         self.qw.setFixedHeight(150)
         self.n = 0
@@ -32,20 +32,49 @@ class CreateWindow(QWidget, CreateWindowGUI):
         self.qw.setLayout(self.tasks_layout)
         self.task_area.setWidget(self.qw)
 
+    def open_file(self):
+        self.task_widgets.clear()
+        for widget in self.task_widgets:
+            widget.hide()
+        directory = QFileDialog.getExistingDirectory()
+        print(directory)
+        setting_file = open(directory + '/setting.txt', 'r', encoding='utf-8')
+        settings = setting_file.readlines()
+        self.name_edit.setText(settings.pop(0).strip())
+        self.variants_count_edit.setValue(int(settings.pop(0).strip()))
+        for task in settings:
+            self.add()
+            self.task_widgets[-1].set_parametrs(*task.split(';'))
+        setting_file.close()
+
+
+
+
+
     def add(self):
         self.n += 1
         task = TaskWidget(self)
         self.task_widgets.append(task)
-        # # self.task_list.addItem(task)
-        # item = QListWidgetItem()
-        # self.task_list.setItemWidget(item, QPushButton())
         self.tasks_layout.addWidget(task)
         self.qw.setFixedHeight(10 + 140 * self.n)
         self.generate_button.setEnabled(True)
 
     def generate(self):
-        def generate_document():
 
+        def save():
+            setting_file = open(directory + '/setting.txt', 'w', encoding='utf-8')
+            settings = []
+            settings.append(self.name_edit.text())
+            settings.append(self.variants_count_edit.text())
+            for task in self.task_widgets:
+                settings.append(str(task.get_id()) + ';' + task.count_edit.text())
+            subprocess.call(['attrib', '+h', directory + '/setting.txt'])
+            setting_file.write('\n'.join(settings))
+            setting_file.close()
+
+
+
+        def generate_document():
             tasks = Document()
             tasks.add_heading(self.name_edit.text() + f' Вариант-{variant}', 0)
             number = 1
@@ -63,7 +92,6 @@ class CreateWindow(QWidget, CreateWindowGUI):
         directory = \
             file_dialog.getSaveFileName(self, self.name_edit.text(), 'имя работы',
                                         'Все файлы (*)')[0]
-        # print(directory)
         os.mkdir(directory)
 
         answers = Document()
@@ -72,6 +100,8 @@ class CreateWindow(QWidget, CreateWindowGUI):
             par = answers.add_paragraph()
             generate_document()
         answers.save(directory + '/' + self.name_edit.text() + '_ответы.docx')
+        save()
+        self.close()
 
 # if __name__ == '__main__':
 #     app = QApplication(sys.argv)

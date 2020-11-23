@@ -20,15 +20,35 @@ class TaskWidget(QWidget, TaskWidgetGUI):
         self.view_button.clicked.connect(self.view)
         self.subject_edit.currentTextChanged.connect(self.subject_changed)
         self.type_edit.currentTextChanged.connect(self.type_changed)
-        self.set_parameters()
+        self.set_subject()
         self.edit_window = EditWindow(only_view=True)
 
     def view(self):
         self.edit_window.set_id(self.get_id())
         self.edit_window.show()
 
+    def set_parametrs(self, id, count):
+        id = int(id)
+        self.subject_edit.clear()
+        self.type_edit.clear()
+        self.name_edit.clear()
+        con = sqlite3.connect('pattern_db.db')
+        cur = con.cursor()
+        subjects = cur.execute("""SELECT subject FROM subjects""").fetchall()
+        for subject in subjects:
+            self.subject_edit.addItem(subject[0])
+        subject = cur.execute(f'''SELECT subject FROM subjects WHERE id = (SELECT id FROM types WHERE id = (SELECT type from patterns WHERE id = {id}))''').fetchall()[0][0]
+        self.subject_edit.setCurrentText(subject)
+        type = cur.execute(f"""SELECT type FROM types WHERE id = (SELECT type FROM patterns WHERE id = '{id}')""").fetchall()[0][0]
+        self.type_edit.setCurrentText(type)
+        name = cur.execute(f'''SELECT name FROM patterns WHERE id = {id}''').fetchall()[0][0]
+        self.name_edit.setCurrentText(name)
+        con.close()
+        self.count_edit.setValue(int(count))
 
-    def set_parameters(self):
+
+
+    def set_subject(self):
         con = sqlite3.connect('pattern_db.db')
         cur = con.cursor()
         subjects = cur.execute("""SELECT subject FROM subjects""").fetchall()

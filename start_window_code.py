@@ -16,14 +16,17 @@ class StartWindow(QMainWindow, StartWindowGUI):
         self.create_button.clicked.connect(self.create_)
         self.open_button.clicked.connect(self.open)
         self.edit_button.clicked.connect(self.edit)
-        self.create_window = CreateWindow()
+
         self.view_window = ViewWindow()
 
     def create_(self):  # метод create уже существует
+        self.create_window = CreateWindow()
         self.create_window.show()
 
     def open(self):
-        pass
+        self.create_window = CreateWindow()
+        self.create_window.open_file()
+        self.create_window.show()
 
 
     def edit(self):
