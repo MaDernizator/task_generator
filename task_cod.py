@@ -18,9 +18,8 @@ class TaskGenerator:
 
     def write(self):
         self.text = (eval(f'f\"{self.pattern.split(";")[0]}\"'), answer)
-        # print(self.text)
 
-    def check(self):  # TODO добавить ограничение по времени
+    def check(self):
         for i in self.pattern.split(";")[3:]:
             try:
                 if not eval(i.strip()):
@@ -33,7 +32,6 @@ class TaskGenerator:
         global answer
         flag = False
         start_time = time()
-        print(start_time)
         error = False
         while not flag:
             if time() - start_time > (5 if not self.test_mode else 2):

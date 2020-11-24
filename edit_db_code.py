@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.AddWindowGUI import AddWindowGUI
 from task_cod import TaskGenerator
 import sqlite3
@@ -9,13 +10,13 @@ sys.excepthook = lambda *a: sys.__excepthook__(*a)
 
 
 class EditWindow(QMainWindow, AddWindowGUI):
-    def __init__(self, view, only_view=False):
-        self.view = view
+    def __init__(self, view=None, only_view=False):
         super().__init__()
         self.setupUi(self)
         self.add_edit_type.hide()
         self.add_edit_subject.hide()
         if not only_view:
+            self.view = view
             self.save_button.setText('Изменить')
             self.clear_button.setText('Удалить')
             self.save_button.clicked.connect(self.save)
@@ -25,6 +26,9 @@ class EditWindow(QMainWindow, AddWindowGUI):
             self.save_button.setEnabled(False)
             self.error_window = ErrorWindow()
         if only_view:
+            def view():
+                pass
+            self.view = view
             self.save_button.hide()
             self.clear_button.hide()
             self.name_edit.setEnabled(False)
