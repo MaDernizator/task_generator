@@ -117,11 +117,15 @@ class AddWindow(QMainWindow, AddWindowGUI):
         return True
 
     def check_pattern(self):
-        try:
-            TaskGenerator(self.pattern_text.toPlainText())
-        except Exception:
-            self.error('Неверный шаблон')
-            return False
+        for _ in range(5):
+            try:
+                task = TaskGenerator(self.pattern_text.toPlainText(), test_mode=True)
+                if not task.get_text():
+                    self.error('Слушком узкие дополнительные условия')
+                    return False
+            except Exception:
+                self.error('Неверный шаблон')
+                return False
         return True
 
     def save(self):

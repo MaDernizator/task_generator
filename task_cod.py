@@ -7,13 +7,14 @@ from time import time
 
 
 class TaskGenerator:
-    def __init__(self, pattern):
+    def __init__(self, pattern, test_mode=False):
+        self.test_mode = test_mode
         self.pattern = pattern
         self.text = None
         self.generate()
 
     def get_text(self):
-        return self.text
+        return self.text if self.text else False
 
     def write(self):
         self.text = (eval(f'f\"{self.pattern.split(";")[0]}\"'), answer)
@@ -32,9 +33,12 @@ class TaskGenerator:
         global answer
         flag = False
         start_time = time()
+        print(start_time)
+        error = False
         while not flag:
-            if time() - start_time > 5:
-                pass  # TODO дописать ошибку
+            if time() - start_time > (5 if not self.test_mode else 2):
+                error = True
+                break
             for _i, symbol_num in enumerate([i for i, a in enumerate(self.pattern) if a == '{']):
                 _s = self.pattern[symbol_num + 1:][:self.pattern[symbol_num + 1:].index('}')]
                 exec(f'{_s} = choice({self.pattern.split(";")[1].split("  ")[_i].strip()})',
@@ -45,4 +49,5 @@ class TaskGenerator:
             except ZeroDivisionError:
                 continue
             flag = self.check()
-        self.write()
+        if not error:
+            self.write()
