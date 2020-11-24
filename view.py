@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.ViewWindowGUI import ViewWindowGUI
-from add_code import AddWindow
-from edit_db_code import EditWindow
+from add import AddWindow
+from edit import EditWindow
 import sqlite3
 import sys
 from PyQt5 import QtWidgets

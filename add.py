@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.AddWindowGUI import AddWindowGUI
-from task_cod import TaskGenerator
+from task import TaskGenerator
 import sqlite3
-from error_code import ErrorWindow
+from error import ErrorWindow
 import sys
 
 sys.excepthook = lambda *a: sys.__excepthook__(*a)

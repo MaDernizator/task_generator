@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui.StartWindowGUI import StartWindowGUI
-from create_window_code import CreateWindow
-from view_code import ViewWindow
+from create import CreateWindow
+from view import ViewWindow
 
 import sys
 

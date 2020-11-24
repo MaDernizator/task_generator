@@ -1,7 +1,7 @@
 from gui.CreateWindowGUI import CreateWindowGUI
-from task_widget_code import TaskWidget
+from task_widget import TaskWidget
 from docx import Document
-from task_cod import TaskGenerator
+from task import TaskGenerator
 from PyQt5.QtWidgets import QFileDialog, QWidget, QVBoxLayout
 import subprocess
 import os

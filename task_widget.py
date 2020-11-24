@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 from gui.NewTaskWidgetGUI import TaskWidgetGUI
 import sqlite3
 from PyQt5.QtGui import QPixmap, QIcon
-from edit_db_code import EditWindow
+from edit import EditWindow
 import sys
 
 sys.excepthook = lambda *a: sys.__excepthook__(*a)
