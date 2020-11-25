@@ -136,13 +136,14 @@ class AddWindow(QMainWindow, AddWindowGUI):
             if self.add_edit_subject.isChecked():
                 cur.execute(f"""INSERT INTO subjects(subject) 
                     VALUES('{self.subject_edit.currentText()}')""")
+                con.commit()
             if self.add_edit_type.isChecked():
                 cur.execute(f"""INSERT INTO types(subject, type) VALUES((SELECT id FROM subjects 
                     WHERE subject = '{self.subject_edit.currentText()}'), 
                     '{self.type_edit.currentText()}')""")
-            type = cur.execute(f"""SELECT id FROM types WHERE subject 
-                = (SELECT id FROM subjects WHERE subject 
-                = '{self.subject_edit.currentText()}')""").fetchall()[0][0]
+                con.commit()
+            type = cur.execute(f"""SELECT id FROM types WHERE type 
+                = '{self.type_edit.currentText()}'""").fetchall()[0][0]
             name = self.name_edit.text()
             pattern = self.pattern_text.toPlainText()
             cur.execute(f"""INSERT INTO patterns(type, name, pattern) 

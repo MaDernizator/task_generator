@@ -33,7 +33,8 @@ class ViewWindow(QMainWindow, ViewWindowGUI):
         for i, row in enumerate(data):
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(row[0])))
             self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(cur.execute(f"""SELECT subject FROM 
-            subjects WHERE id = (SELECT id FROM types WHERE id = {row[1]})""").fetchall()[0][0]))
+                subjects WHERE id = (SELECT subject FROM types WHERE id 
+                = {row[1]})""").fetchall()[0][0]))
             self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(cur.execute(f"""SELECT type FROM 
                                         types WHERE id = {row[1]}""").fetchall()[0][0]))
             self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(row[2]))
