@@ -37,7 +37,7 @@ class TaskWidget(QWidget, TaskWidgetGUI):
         for subject in subjects:
             self.subject_edit.addItem(subject[0])
         subject = cur.execute(f'''SELECT subject FROM subjects WHERE id 
-            = (SELECT id FROM types WHERE id 
+            = (SELECT subject FROM types WHERE id 
             = (SELECT type from patterns WHERE id = {id}))''').fetchall()[0][0]
         self.subject_edit.setCurrentText(subject)
         type = cur.execute(f"""SELECT type FROM types WHERE id 

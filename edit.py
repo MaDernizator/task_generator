@@ -40,6 +40,7 @@ class EditWindow(QMainWindow, AddWindowGUI):
 
     def changed(self):
         self.save_button.setEnabled(True)
+        self.clear_button.setEnabled(False)
 
     def delete(self):
         if self.save_button.isEnabled():
@@ -77,6 +78,7 @@ class EditWindow(QMainWindow, AddWindowGUI):
         self.subject_edit.setEnabled(False)
         self.type_edit.setEnabled(False)
         self.save_button.setEnabled(False)
+        self.clear_button.setEnabled(True)
 
     def check_name_and_type_and_subject(self):
         if not self.name_edit.text().strip():
@@ -103,6 +105,7 @@ class EditWindow(QMainWindow, AddWindowGUI):
         self.statusbar.clearMessage()
         if self.check_name_and_type_and_subject() and self.check_pattern():
             self.save_button.setEnabled(False)
+            self.clear_button.setEnabled(True)
             con = sqlite3.connect('pattern_db.db')
             cur = con.cursor()
             cur.execute(
