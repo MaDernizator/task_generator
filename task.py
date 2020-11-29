@@ -7,7 +7,7 @@ import math
 После точки с запятой перечисляются диапозоны этих значений, затем - формула ответа, затем
 неограниченное количество условий.'''
 
-string = '''На экзамене {c} билетов, Сергей{v} выучил {n} из них. Найдите вероятность того, что ему попадётся выученный билет.;range(6, 100)  ["", " не"]  range(1, 100);1 - n / c if v else n / c; n / c * 10 == int(n / c * 10); n < c'''
+string = '''На экзамене {c} билетов, Сергей{v} выучил {n} из них. Найдите вероятность того, что ему попадётся выученный билет.;range(6, 100)  ["", " не"]  range(1, 100);1 - n / c if v else n / c;round(answer, 2) == answer; n < c'''
 
 class TaskGenerator:
     def __init__(self, pattern, test_mode=False):
@@ -53,5 +53,5 @@ class TaskGenerator:
         if not error:
             self.write()
 
-# task = TaskGenerator(string)
-# print(task.get_text())
+#task = TaskGenerator(string)
+#print(task.get_text())

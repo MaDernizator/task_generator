@@ -155,4 +155,8 @@ class AddWindow(QMainWindow, AddWindowGUI):
             con.close()
             self.save_button.setEnabled(False)
             self.view.reload()
+            self.subject_edit.clear()
+            self.type_edit.clear()
+            self.name_edit.clear()
+            self.pattern_text.clear()
             self.close()
