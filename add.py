@@ -146,9 +146,6 @@ class AddWindow(QMainWindow, AddWindowGUI):
                 = '{self.type_edit.currentText()}'""").fetchall()[0][0]
             name = self.name_edit.text()
             pattern = self.pattern_text.toPlainText()
-            print(type)
-            print(name)
-            print(pattern)
             cur.execute(f"""INSERT INTO patterns(type, name, pattern) 
                             VALUES({type}, '{name}', '{pattern}')""")
             con.commit()

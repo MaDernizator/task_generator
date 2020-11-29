@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 from gui.AddWindowGUI import AddWindowGUI
 from task import TaskGenerator
 import sqlite3
@@ -28,6 +27,7 @@ class EditWindow(QMainWindow, AddWindowGUI):
         if only_view:
             def view():
                 pass
+
             self.view = view
             self.save_button.hide()
             self.clear_button.hide()
