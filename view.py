@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 from gui.ViewWindowGUI import ViewWindowGUI
 from add import AddWindow
 from edit import EditWindow
