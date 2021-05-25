@@ -71,7 +71,7 @@ class TaskWidgetGUI(object):
         self.count_edit.setObjectName("count_edit")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.count_edit)
         self.view_button = QtWidgets.QPushButton(Form)
-        self.view_button.setGeometry(QtCore.QRect(700, 70, 25, 25))
+        self.view_button.setGeometry(QtCore.QRect(700, 40, 25, 25))
         self.view_button.setText("")
         self.view_button.setObjectName("view_button")
         self.delete_button = QtWidgets.QPushButton(Form)
