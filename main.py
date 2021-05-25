@@ -18,7 +18,7 @@ class StartWindow(QMainWindow, StartWindowGUI):
 
         self.view_window = ViewWindow()
 
-    def create_(self):  # метод create уже существует
+    def create_(self):
         self.create_window = CreateWindow()
         self.create_window.show()
 

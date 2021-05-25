@@ -31,7 +31,6 @@ class CreateWindow(QWidget, CreateWindowGUI):
         for widget in self.task_widgets:
             widget.hide()
         directory = QFileDialog.getExistingDirectory()
-        print(directory)
         setting_file = open(directory + '/setting.txt', 'r', encoding='utf-8')
         settings = setting_file.readlines()
         self.name_edit.setText(settings.pop(0).strip())
@@ -48,6 +47,15 @@ class CreateWindow(QWidget, CreateWindowGUI):
         self.tasks_layout.addWidget(task)
         self.qw.setFixedHeight(10 + 140 * self.n)
         self.generate_button.setEnabled(True)
+
+    def del_task(self, target_task):
+        for i, task in enumerate(self.task_widgets):
+            if task == target_task:
+                self.tasks_layout.removeWidget(task)
+                task.deleteLater()
+                del self.task_widgets[i]
+                self.n -= 1
+                self.qw.setFixedHeight(10 + 140 * self.n)
 
     def generate(self):
 

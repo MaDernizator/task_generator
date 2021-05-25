@@ -4,6 +4,7 @@ import sqlite3
 from PyQt5.QtGui import QPixmap, QIcon
 from edit import EditWindow
 import sys
+from random import randint
 
 sys.excepthook = lambda *a: sys.__excepthook__(*a)
 
@@ -12,15 +13,25 @@ class TaskWidget(QWidget, TaskWidgetGUI):
 
     def __init__(self, form):
         super().__init__(form)
+        self.parent = form
         self.setupUi(self)
         pixmap = QPixmap('view.png')
         icon = QIcon(pixmap)
         self.view_button.setIcon(icon)
         self.view_button.clicked.connect(self.view)
+        pixmap = QPixmap('delete.png')
+        icon = QIcon(pixmap)
+        self.delete_button.setIcon(icon)
+        self.delete_button.clicked.connect(self.delete)
         self.subject_edit.currentTextChanged.connect(self.subject_changed)
         self.type_edit.currentTextChanged.connect(self.type_changed)
         self.set_subject()
         self.edit_window = EditWindow(only_view=True)
+
+
+    def delete(self):
+        self.parent.del_task(self)
+
 
     def view(self):
         self.edit_window.set_id(self.get_id())

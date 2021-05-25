@@ -15,7 +15,7 @@ class TaskWidgetGUI(object):
     def setupUi(self, Form):
         # Form.resize(436, 147)
         self.formLayoutWidget = QtWidgets.QWidget(Form)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 10, 381, 131))
+        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 10, 670, 131))
         self.formLayoutWidget.setObjectName("formLayoutWidget")
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.formLayout.setContentsMargins(0, 0, 0, 0)
@@ -71,9 +71,13 @@ class TaskWidgetGUI(object):
         self.count_edit.setObjectName("count_edit")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.count_edit)
         self.view_button = QtWidgets.QPushButton(Form)
-        self.view_button.setGeometry(QtCore.QRect(400, 70, 25, 25))
+        self.view_button.setGeometry(QtCore.QRect(700, 70, 25, 25))
         self.view_button.setText("")
         self.view_button.setObjectName("view_button")
+        self.delete_button = QtWidgets.QPushButton(Form)
+        self.delete_button.setGeometry(QtCore.QRect(700, 10, 25, 25))
+        self.delete_button.setText("")
+        self.delete_button.setObjectName("delete_button")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
