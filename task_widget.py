@@ -28,10 +28,8 @@ class TaskWidget(QWidget, TaskWidgetGUI):
         self.set_subject()
         self.edit_window = EditWindow(only_view=True)
 
-
     def delete(self):
         self.parent.del_task(self)
-
 
     def view(self):
         self.edit_window.set_id(self.get_id())
